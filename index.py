@@ -1,17 +1,36 @@
 from fastapi import FastAPI
+import requests
+import random
 
 app = FastAPI()
 
+NAMES_MS_URL = "http://164.92.190.208:3001/api/v1/names"
+
 @app.get("/")
 def root():
-    return  {"message" : "Welcome to KITTENS ms!"} 
+    return {"message": "Welcome to KITTENS ms!"}
 
 @app.get("/api/v1/kittens")
 def get_kittens():
-    return {
-        "1": "Black kitty",
-        "2": "White kitty",
-        "3": "Whiskers",
-        "4": "Shadow",
-        "5": "Miu miu kitty"
-    }
+    kittens = [
+        "Black kitty",
+        "White kitty",
+        "Whiskers",
+        "Shadow",
+        "Miu miu kitty"
+    ]
+
+    # Call names microservice
+    response = requests.get(NAMES_MS_URL)
+    names_dict = response.json()
+    names = list(names_dict.values())
+
+    # Assign random name to each kitten
+    result = []
+    for kitten in kittens:
+        result.append({
+            "kitten": kitten,
+            "name": random.choice(names)
+        })
+
+    return result
