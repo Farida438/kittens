@@ -4,7 +4,9 @@ import random
 
 app = FastAPI()
 
-NAMES_MS_URL = "http://164.92.190.208:3001/api/v1/names"
+NAMES_MS_URL = "http://names-ms-v1:8000/api/v1/names"
+
+
 
 @app.get("/")
 def root():
